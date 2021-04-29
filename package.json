@@ -1,0 +1,14 @@
+{
+	"name": "web-test-cases",
+	"version": "1.0.0",
+	"description": "",
+	"main": "main.js",
+	"scripts": {
+		"start": "node ./main.js"
+	},
+	"keywords": [],
+	"license": "MIT",
+	"dependencies": {
+		"puppeteer": "9.0.0"
+	}
+}
