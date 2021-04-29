@@ -97,18 +97,16 @@ async function testCase_2(headless) {
 	await page.waitForTimeout(TIMEOUT);
 	const j = await page.evaluate(() => {
 		if (!document.querySelector(".company__content h3")) {
-			return 0;
+			return '';
 		} else {
 
 			return document.querySelector(".company__content h3").innerText;
 		}
 	});
-	if (j.search(test)) {
-		return true;
-	}
-	else {
-		return false;
-	}
+	// ===
+	await page.waitForTimeout(TIMEOUT);
+	await browser.close();
+	return j.includes(test);
 }
 
 /* ========================================================
@@ -116,7 +114,54 @@ async function testCase_2(headless) {
 =========================================================== */
 
 async function testCase_3(headless) {
-	return true;
+	const link = 'https://www.google.com/';
+	const searchText = 'Ви отримаєте бонусні гривні на ваш рахунок протягом 7 днів після публікації відгуку на сайті.';
+	// ===
+	const browser = await Puppeteer.launch({
+		headless
+	});
+	const page = await browser.newPage();
+	await page.setViewport({
+		width: 1400,
+		height: 1080
+	})
+	// ===
+	await page.goto(link);
+	await page.waitForTimeout(TIMEOUT)
+	// ===
+	await page.click('input[name="q"]');
+	await page.waitForTimeout(TIMEOUT)
+	// ===
+	await page.keyboard.type('Розетка');
+	await page.waitForTimeout(TIMEOUT)
+	// ===
+	await page.click('input[name="btnK"]');
+	await page.waitForTimeout(TIMEOUT)
+	// ===
+	await page.click('.g a');
+	await page.waitForTimeout(TIMEOUT)
+	// ===
+	await page.click('.button.button--medium.button--with-icon.main-links__help');
+	await page.waitForTimeout(TIMEOUT)
+	// ===
+	await page.click('#title_bonus');
+	await page.waitForTimeout(TIMEOUT)
+	// ===
+	await page.evaluate(() => {
+		const item = document.querySelectorAll('.article-list .article-list-item')[0];
+		item.querySelector('.article-list-link').click();
+	});
+	await page.waitForTimeout(TIMEOUT)
+	// ===
+	const res = await page.evaluate(() => {
+		const textEl = document.querySelector('.article-content');
+		return textEl ? textEl.innerText : '';
+	} );
+	await page.waitForTimeout(TIMEOUT)
+	// ===
+	await browser.close();
+	// ===
+	return res.includes(searchText);
 }
 
 /* ======================================================== */
