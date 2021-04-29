@@ -11,9 +11,14 @@ const TIMEOUT = 1000;
 async function testCase_1(headless) {
 	const link = 'https://www.google.com/';
 	// ===
-	const browser = await Puppeteer.launch({ headless });
+	const browser = await Puppeteer.launch({
+		headless
+	});
 	const page = await browser.newPage();
-	await page.setViewport({ width: 1400, height: 1080 })
+	await page.setViewport({
+		width: 1400,
+		height: 1080
+	})
 	// ===
 	await page.goto(link);
 	await page.waitForTimeout(TIMEOUT)
@@ -42,10 +47,10 @@ async function testCase_1(headless) {
 	await page.click('#ctl00_MainContent_ctl00_btnShowSchedule');
 	await page.waitForTimeout(TIMEOUT)
 	// ===
-	const res =  await page.evaluate(() => {
+	const res = await page.evaluate(() => {
 		const testSubject = 'Якість та тестування програмного забезпечення';
 		const listDay = document.querySelectorAll('#ctl00_MainContent_FirstScheduleTable tr');
-		for(const arrDay of listDay) {
+		for (const arrDay of listDay) {
 			const item = arrDay.children[3];
 			const subject = item.querySelector('.disLabel');
 			if (subject && subject.innerText.includes(testSubject)) {
@@ -65,7 +70,45 @@ async function testCase_1(headless) {
 =========================================================== */
 
 async function testCase_2(headless) {
-	return true;
+	const link = 'https://www.google.com/';
+	const test = "з 07:30 до 22:30";
+	const browser = await Puppeteer.launch({
+		headless
+	});
+	const page = await browser.newPage();
+	await page.setViewport({
+		width: 1400,
+		height: 1080
+	}) // ===
+	await page.goto(link);
+	await page.waitForTimeout(TIMEOUT)
+
+	await page.click('.gLFyf');
+	await page.waitForTimeout(TIMEOUT);
+	await page.keyboard.type("епіцентр");
+	await page.waitForTimeout(TIMEOUT);
+	await page.keyboard.press('Enter');
+	await page.waitForTimeout(TIMEOUT);
+	await page.click('.cfxYMc');
+	await page.waitForTimeout(TIMEOUT);
+	await page.click('.header__info-menu');
+	await page.waitForTimeout(TIMEOUT);
+	await page.click('.is-red');
+	await page.waitForTimeout(TIMEOUT);
+	const j = await page.evaluate(() => {
+		if (!document.querySelector(".company__content h3")) {
+			return 0;
+		} else {
+
+			return document.querySelector(".company__content h3").innerText;
+		}
+	});
+	if (j.search(test)) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 /* ========================================================
